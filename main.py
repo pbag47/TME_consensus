@@ -1,4 +1,6 @@
 import asyncio
+import time
+
 import cf_info
 import cflib.crtp
 import csv
@@ -134,6 +136,12 @@ def main():
         SWARM_MANAGER.add_agent(agent)
 
     SWARM_MANAGER.manual_flight_agents_list = USER_WINDOW.manual_agents_list
+
+    time.sleep(2)
+
+    for agent in agents:
+        agent.setup_parameters()
+        agent.start_attitude_logs()
 
     # -- Real-time stream start -------------------------------------------------- #
     RUN_TRACKER = True

@@ -94,9 +94,9 @@ class Agent:
 
     def cf_connected_callback(self, _):
         self.enabled = True
-        self.setup_parameters()
+        # self.setup_parameters()
         self.cf.commander.send_setpoint(0, 0, 0, 0)
-        self.start_attitude_logs()
+        # self.start_attitude_logs()
 
     def cf_connection_failed_callback(self, _, __):
         self.battery_test_passed = True
@@ -105,7 +105,7 @@ class Agent:
         print(self.name, 'connection attempt failed')
 
     def setup_parameters(self):
-        time.sleep(1.5)
+        # time.sleep(2)
         log_config = LogConfig(name=self.name + ' battery voltage', period_in_ms=50)
         log_config.add_variable('pm.vbat', 'float')  # Retrieves the battery level
         self.cf.log.add_config(log_config)
