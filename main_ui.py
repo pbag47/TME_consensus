@@ -203,6 +203,7 @@ class Window(QMainWindow, gui.Ui_MainWindow):
                 valid_gr = [gr for gr in self.series if gr.enabled]
                 self.selected_gr = [valid_gr[0]]
             self.update_connectivity_checkbox()
+            self.update_parameters_ui()
 
     def update_connectivity_checkbox(self):
         for checkbox in self.connectivity_checkbox_list:
