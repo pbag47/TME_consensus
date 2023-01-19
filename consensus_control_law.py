@@ -43,7 +43,7 @@ def z_consensus_control_law(agent: Agent, agents_list: List[Agent]):
     # ------------------ A remplir --------------------- #
     #
     #
-    vz = ...  # (m/s)
+    vz = 0  # (m/s)
     #
     #
     # -------------------------------------------------- #
@@ -109,8 +109,8 @@ def xy_consensus_control_law(agent: Agent, agents_list: List[Agent]):
     # ------------------ A remplir --------------------- #
     #
     #
-    roll = ...  # (rad)
-    pitch = ...  # (rad)
+    roll = 0  # (rad)
+    pitch = 0  # (rad)
     #
     #
     # -------------------------------------------------- #
