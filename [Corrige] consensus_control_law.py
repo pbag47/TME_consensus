@@ -1,5 +1,4 @@
 from agent_class import Agent
-
 from typing import List
 import numpy
 
@@ -43,7 +42,9 @@ def z_consensus_control_law(agent: Agent, agents_list: List[Agent]):
     # ------------------ A remplir --------------------- #
     #
     #
-    vz = 0  # (m/s)
+    kp = 1
+    z_errors_list = [agt.extpos.z - agent.extpos.z for agt in connected_agents]
+    vz = kp * sum(z_errors_list)  # (m/s)
     #
     #
     # -------------------------------------------------- #
@@ -107,8 +108,33 @@ def xy_consensus_control_law(agent: Agent, agents_list: List[Agent]):
     # ------------------ A remplir --------------------- #
     #
     #
-    roll = 0  # (rad)
-    pitch = 0  # (rad)
+    kp = 1
+    xi = 0.7
+    #
+    xn_errors_list = []
+    yn_errors_list = []
+    vxn_errors_list = []
+    vyn_errors_list = []
+    for agt in connected_agents:
+        x_error = agt.extpos.x - agent.extpos.x
+        y_error = agt.extpos.y - agent.extpos.y
+        xn_error = x_error * numpy.cos(measured_yaw) + y_error * numpy.sin(measured_yaw)
+        yn_error = - x_error * numpy.sin(measured_yaw) + y_error * numpy.cos(measured_yaw)
+        xn_errors_list.append(xn_error)
+        yn_errors_list.append(yn_error)
+        #
+        vx_error = agt.velocity[0] - agent.velocity[0]
+        vy_error = agt.velocity[1] - agent.velocity[1]
+        vxn_error = vx_error * numpy.cos(measured_yaw) + vy_error * numpy.sin(measured_yaw)
+        vyn_error = - vx_error * numpy.sin(measured_yaw) + vy_error * numpy.cos(measured_yaw)
+        vxn_errors_list.append(vxn_error)
+        vyn_errors_list.append(vyn_error)
+    #
+    ax = kp * (sum(xn_errors_list) - r) + xi * sum(vxn_errors_list)
+    ay = kp * (sum(yn_errors_list) - rho) + xi * sum(vyn_errors_list)
+    #
+    roll = - ay  # (rad)
+    pitch = ax  # (rad)
     #
     #
     # -------------------------------------------------- #

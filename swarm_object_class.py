@@ -158,7 +158,12 @@ class SwarmObject:
             return
 
         thrust = thrust_control_law(agent, agent.xy_consensus_z)
-        yaw_rate = yaw_rate_control_law(agent, 0)
+        manual_agents = [agt for agt in in_flight_agents if agt.state == 'Manual']
+        if manual_agents:
+            targeted_yaw = numpy.mean([agt.yaw for agt in manual_agents]) * numpy.pi / 180
+        else:
+            targeted_yaw = 0
+        yaw_rate = yaw_rate_control_law(agent, targeted_yaw)
         agent.csv_logger.writerow([agent.name, agent.timestamp,
                                    agent.extpos.x, agent.extpos.y, agent.extpos.z, agent.yaw,
                                    agent.velocity[0], agent.velocity[1], agent.velocity[2],
