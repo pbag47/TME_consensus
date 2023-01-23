@@ -1,6 +1,4 @@
 import asyncio
-import time
-
 import cf_info
 import cflib.crtp
 import csv
@@ -8,6 +6,7 @@ import pynput.keyboard
 import qasync
 import qtm_tools
 import sys
+import time
 
 from joystick_class import Joystick
 from main_ui import Window

@@ -1,6 +1,5 @@
-import numpy as np
-
 import consensus_control_law
+import numpy
 
 from agent_class import Agent
 from typing import List, Union
@@ -94,8 +93,8 @@ class SwarmObject:
         kp = 0.45
         ks = 0.1
 
-        agent.standby_position[0] = agent.extpos.x - np.sign(self.manual_x) * kp * np.sqrt(abs(self.manual_x))
-        agent.standby_position[1] = agent.extpos.y - np.sign(self.manual_y) * kp * np.sqrt(abs(self.manual_y))
+        agent.standby_position[0] = agent.extpos.x - numpy.sign(self.manual_x) * kp * numpy.sqrt(abs(self.manual_x))
+        agent.standby_position[1] = agent.extpos.y - numpy.sign(self.manual_y) * kp * numpy.sqrt(abs(self.manual_y))
 
         if agent.standby_position[0] < agent.x_boundaries[0] + ks:
             agent.standby_position[0] = agent.x_boundaries[0] + ks
@@ -189,8 +188,8 @@ class SwarmObject:
     def standby_control_law(self, agent: Agent):
         agents_to_avoid = [agt for agt in self.swarm_agent_list if agt.name in agent.xy_auto_avoid_agents_list]
         objective = [agent.standby_position[0], agent.standby_position[1]]
-        omega = np.pi / (2 * horizontal_distance([agent.x_boundaries[0], agent.y_boundaries[0]],
-                                                 [agent.x_boundaries[1], agent.y_boundaries[1]]))
+        omega = numpy.pi / (2 * horizontal_distance([agent.x_boundaries[0], agent.y_boundaries[0]],
+                                                    [agent.x_boundaries[1], agent.y_boundaries[1]]))
         vx, vy = get_auto_avoid_velocity_command(agent, agent.x_boundaries, agent.y_boundaries, agents_to_avoid,
                                                  objective, omega, self.xy_auto_avoid_d0)
         vz = agent.standby_position[2] - agent.extpos.z
@@ -204,8 +203,8 @@ class SwarmObject:
     def back_to_initial_position_ctl_law(self, agent):
         agents_to_avoid = [agt for agt in self.swarm_agent_list if agt.name in agent.xy_auto_avoid_agents_list]
         objective = [agent.initial_position[0], agent.initial_position[1]]
-        omega = np.pi / (2 * horizontal_distance([agent.x_boundaries[0], agent.y_boundaries[0]],
-                                                 [agent.x_boundaries[1], agent.y_boundaries[1]]))
+        omega = numpy.pi / (2 * horizontal_distance([agent.x_boundaries[0], agent.y_boundaries[0]],
+                                                    [agent.x_boundaries[1], agent.y_boundaries[1]]))
         vx, vy = get_auto_avoid_velocity_command(agent, agent.x_boundaries, agent.y_boundaries, agents_to_avoid,
                                                  objective, omega, self.xy_auto_avoid_d0)
         vz = agent.takeoff_height - agent.extpos.z
@@ -226,7 +225,7 @@ def get_auto_avoid_velocity_command(agent: Agent, x_limits: [float] * 2, y_limit
     kpo = 2.5
     kvo = 1
     for agt in agents_to_avoid:
-        v = np.sqrt(agt.velocity[0] ** 2 + agt.velocity[1] ** 2)
+        v = numpy.sqrt(agt.velocity[0] ** 2 + agt.velocity[1] ** 2)
         if v > 0.25:
             kv2 = (kvo * v) ** 2
             xb = agt.extpos.x + kvo * agt.velocity[0]
@@ -242,40 +241,40 @@ def get_auto_avoid_velocity_command(agent: Agent, x_limits: [float] * 2, y_limit
                 d = horizontal_distance([agent.extpos.x, agent.extpos.y], [xc, yc])
                 if d <= d0:
                     vx = vx - (((xc - agent.extpos.x) / (d + 0.001))
-                               * kpo * (np.exp(-d) - np.exp(-d0)))
+                               * kpo * (numpy.exp(-d) - numpy.exp(-d0)))
                     vy = vy - (((yc - agent.extpos.y) / (d + 0.001))
-                               * kpo * (np.exp(-d) - np.exp(-d0)))
+                               * kpo * (numpy.exp(-d) - numpy.exp(-d0)))
             else:
                 da = horizontal_distance([agent.extpos.x, agent.extpos.y], [agt.extpos.x, agt.extpos.y])
                 db = horizontal_distance([agent.extpos.x, agent.extpos.y], [xb, yb])
                 if da < db and da <= d0:
                     vx = vx - (((agt.extpos.x - agent.extpos.x) / (da + 0.001))
-                               * kpo * (np.exp(-da) - np.exp(-d0)))
+                               * kpo * (numpy.exp(-da) - numpy.exp(-d0)))
                     vy = vy - (((agt.extpos.y - agent.extpos.y) / (da + 0.001))
-                               * kpo * (np.exp(-da) - np.exp(-d0)))
+                               * kpo * (numpy.exp(-da) - numpy.exp(-d0)))
                 elif db < da and db < d0:
                     vx = vx - (((xb - agent.extpos.x) / (db + 0.001))
-                               * kpo * (np.exp(-db) - np.exp(-d0)))
+                               * kpo * (numpy.exp(-db) - numpy.exp(-d0)))
                     vy = vy - (((yb - agent.extpos.y) / (db + 0.001))
-                               * kpo * (np.exp(-db) - np.exp(-d0)))
+                               * kpo * (numpy.exp(-db) - numpy.exp(-d0)))
         else:
             d = horizontal_distance([agent.extpos.x, agent.extpos.y], [agt.extpos.x, agt.extpos.y])
             if d <= d0:
                 vx = vx - (((agt.extpos.x - agent.extpos.x) / (d + 0.001))
-                           * kpo * (np.exp(-d) - np.exp(-d0)))
+                           * kpo * (numpy.exp(-d) - numpy.exp(-d0)))
                 vy = vy - (((agt.extpos.y - agent.extpos.y) / (d + 0.001))
-                           * kpo * (np.exp(-d) - np.exp(-d0)))
+                           * kpo * (numpy.exp(-d) - numpy.exp(-d0)))
 
     # Objective
     kpg = 1
     distance_to_objective = horizontal_distance([agent.extpos.x, agent.extpos.y],
                                                 [objective[0],
                                                  objective[1]])
-    d1 = np.pi / (2 * omega)
+    d1 = numpy.pi / (2 * omega)
     vx = vx + ((objective[0] - agent.extpos.x) * kpg
-               / (2 * d1 * np.sqrt((distance_to_objective + 0.001) / d1)))
+               / (2 * d1 * numpy.sqrt((distance_to_objective + 0.001) / d1)))
     vy = vy + ((objective[1] - agent.extpos.y) * kpg
-               / (2 * d1 * np.sqrt((distance_to_objective + 0.001) / d1)))
+               / (2 * d1 * numpy.sqrt((distance_to_objective + 0.001) / d1)))
 
     # Borders
     x_min = x_limits[0] + 0.2 * (x_limits[1] - x_limits[0])
@@ -322,18 +321,18 @@ def thrust_control_law(agent: Agent, targeted_z: float) -> int:
 
 def yaw_rate_control_law(agent: Agent, targeted_yaw: float) -> float:
     yaw_kp = 10
-    targeted_yaw = targeted_yaw % (2 * np.pi)
-    if targeted_yaw > np.pi:
-        targeted_yaw = targeted_yaw - (2 * np.pi)
+    targeted_yaw = targeted_yaw % (2 * numpy.pi)
+    if targeted_yaw > numpy.pi:
+        targeted_yaw = targeted_yaw - (2 * numpy.pi)
 
-    measured_yaw = agent.yaw * np.pi / 180
-    measured_yaw = measured_yaw % (2 * np.pi)
-    if measured_yaw > np.pi:
-        measured_yaw = measured_yaw - (2 * np.pi)
+    measured_yaw = agent.yaw * numpy.pi / 180
+    measured_yaw = measured_yaw % (2 * numpy.pi)
+    if measured_yaw > numpy.pi:
+        measured_yaw = measured_yaw - (2 * numpy.pi)
 
     yaw_error_0 = targeted_yaw - measured_yaw
-    yaw_error_1 = targeted_yaw - measured_yaw + 2 * np.pi
-    yaw_error_2 = targeted_yaw - measured_yaw - 2 * np.pi
+    yaw_error_1 = targeted_yaw - measured_yaw + 2 * numpy.pi
+    yaw_error_2 = targeted_yaw - measured_yaw - 2 * numpy.pi
 
     if abs(yaw_error_1) < abs(yaw_error_0) and abs(yaw_error_1) < abs(yaw_error_2):
         yaw_error = yaw_error_1
@@ -342,7 +341,7 @@ def yaw_rate_control_law(agent: Agent, targeted_yaw: float) -> float:
     else:
         yaw_error = yaw_error_0
 
-    yaw_rate = - round(yaw_kp * yaw_error * 180 / np.pi)        # (°/s)
+    yaw_rate = - round(yaw_kp * yaw_error * 180 / numpy.pi)        # (°/s)
 
     max_yaw_rate = 180  # (°/s)
     if yaw_rate > max_yaw_rate:
@@ -353,18 +352,18 @@ def yaw_rate_control_law(agent: Agent, targeted_yaw: float) -> float:
 
 
 def distance(position_1_xyz_list: List[float], position_2_xyz_list: List[float]):
-    d = np.sqrt((position_1_xyz_list[0] - position_2_xyz_list[0]) ** 2
-                + (position_1_xyz_list[1] - position_2_xyz_list[1]) ** 2
-                + (position_1_xyz_list[2] - position_2_xyz_list[2]) ** 2)
+    d = numpy.sqrt((position_1_xyz_list[0] - position_2_xyz_list[0]) ** 2
+                   + (position_1_xyz_list[1] - position_2_xyz_list[1]) ** 2
+                   + (position_1_xyz_list[2] - position_2_xyz_list[2]) ** 2)
     return d
 
 
 def vertical_distance(position_1_z: float, position_2_z: float):
-    vd = np.sqrt((position_1_z - position_2_z) ** 2)
+    vd = numpy.sqrt((position_1_z - position_2_z) ** 2)
     return vd
 
 
 def horizontal_distance(position_1_xy: List[float], position_2_xy: List[float]):
-    hd = np.sqrt((position_1_xy[0] - position_2_xy[0]) ** 2
-                 + (position_1_xy[1] - position_2_xy[1]) ** 2)
+    hd = numpy.sqrt((position_1_xy[0] - position_2_xy[0]) ** 2
+                    + (position_1_xy[1] - position_2_xy[1]) ** 2)
     return hd

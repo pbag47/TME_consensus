@@ -5,7 +5,6 @@ import struct
 
 from fcntl import ioctl
 from swarm_object_class import SwarmObject
-
 from threading import Thread
 from typing import Union
 
