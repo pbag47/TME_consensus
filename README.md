@@ -12,12 +12,12 @@ Ce projet a été conçu pour fonctionner en Python 3.10 avec le logiciel Pychar
 
 
 ### 1.1. Installation d'Ubuntu
-- Créer une clé USB bootable contenant Ubuntu 22.04 (voir documentation sur le site officiel Linux) ;
-- Après avoir branché cette clé bootable sur le PC dédié au projet, démarrer le PC et ouvrir le menu de démarrage ou le menu du BIOS ;
-- Configurer le périphérique démarrage pour que l'ordinateur démarre avec l'OS contenu dans la clé USB, puis enregistrer et rebooter le PC ;
-- Une fois qu'Ubuntu est démarré depuis la clé USB, suivre les instructions et installer Ubuntu 22.04 sur le PC en configuration minimale (en simple ou dual-boot selon l'utilisation souhaitée) ;
-- A la fin de l'installation, connecter le PC à Internet, puis lancer l'application "Software Updater" ;
-- Installer les mises à jour les plus récentes et redémarrer le PC ;
+- Créer une clé USB bootable contenant Ubuntu 22.04 (voir documentation sur le site officiel Linux)
+- Après avoir branché cette clé bootable sur le PC dédié au projet, démarrer le PC et ouvrir le menu de démarrage ou le menu du BIOS
+- Configurer le périphérique démarrage pour que l'ordinateur démarre avec l'OS contenu dans la clé USB, puis enregistrer et rebooter le PC
+- Une fois qu'Ubuntu est démarré depuis la clé USB, suivre les instructions et installer Ubuntu 22.04 sur le PC en configuration minimale (en simple ou dual-boot selon l'utilisation souhaitée)
+- A la fin de l'installation, connecter le PC à Internet, puis lancer l'application "Software Updater"
+- Installer les mises à jour les plus récentes et redémarrer le PC
 - Dernière étape : ouvrir un terminal de commande et entrer les commandes suivantes : 
   + ~$ ```sudo apt-get update```
   + ~$ ```sudo apt-get upgrade```
@@ -29,7 +29,7 @@ En revanche, le gestionnaire de paquets pip n'est pas installé par défaut.
   + ~$ ```sudo apt install python3-pip```
 
 Pour séparer les projets Python dans des environnements distancts (et afin d'éviter les problèmes de compatibilité entre les librairies utilisées par différents projets),
-il est préferrable d'isoler chaque projet dans un environnement virtuel qui contient uniquement les librairies Python nécessaiers au projet.
+il est préférable d'isoler chaque projet dans un environnement virtuel qui contient uniquement les librairies Python nécessaires au projet.
 Le module "venv" permet de créer et gérer les environnements virtuels.
 - Installer venv :
   + ~$ ```sudo apt install python3.10-venv```
@@ -37,10 +37,11 @@ Le module "venv" permet de créer et gérer les environnements virtuels.
 ### 1.3. Installation du cfclient
 Le cfclient est l'application officielle de Bitcraze pour configurer et faire voler les drones Crazyflie. 
 Pour ce projet, il ne sera utilisé que pour configurer les drones.
-La procédure d'installation du cfclient est rappelée ici, bien qu'elle soit disponible sur le 
-[site officiel de Bitcraze]([https://pages.github.com/](https://www.bitcraze.io/documentation/repository/crazyflie-clients-python/master/installation/install/))
+La procédure d'installation du cfclient est rappelée ici, bien qu'elle soit disponible sur le site officiel de bitcraze : 
+https://www.bitcraze.io/documentation/repository/crazyflie-clients-python/master/installation/install/
 - Créer un environnement virtuel spécifique au cfclient :
   + ~$ ```python3 -m venv cfclient``` 
+
 Cette commande crée un dossier "cfclient" dans le répertoire ```~/``` (Home), dans lequel un nouvel interpréteur Python 3.10 est ajouté.
 - Activer l'environnement virtuel :
   + ~$ ```source cfclient/bin/activate```
@@ -109,7 +110,7 @@ Pour intégrer ce raccourci à la liste des applications, il est nécessaire de 
 Le raccourci apparaît alors dans le menu des applications (touche Windows sur le bureau), et il est possible de l'ajouter à la barre des favoris 
 (clic-droit, puis "add to favourites").
 
-- Répéter la procédure avec JupyterLab en créant le fichier "jupyterlab.desktop" contenant les informations suivantes (adaptées su besoin) :
+- Répéter la procédure avec JupyterLab en créant le fichier "jupyterlab.desktop" contenant les informations suivantes (adaptées si besoin) :
 ```
 [Desktop Entry]
 Version=3.5.3
@@ -130,7 +131,7 @@ Cette partie décrit comment importer ce projet de GitHub vers le PC utilisé.
 
 - Ouvrir Pycharm.
 - Dans l'écran d'accueil, cliquer sur "Get from VCS"
-- Sélectionner "Get from URL"
+- Sélectionner "Repository URL"
 - Copier-coller le lien suivant : https://github.com/pbag47/TME_consensus.git 
 - Spécifier le répertoire de destination
 - Cliquer sur "Clone"
@@ -142,7 +143,7 @@ Les fichiers sont alors téléchargés sur le PC, et Pycharm ouvre le projet.
 - Cliquer sur "Add Interpreter" -> "Add local interpreter" -> "Virtualenv Environment" -> "New"
 - Laisser les paramètres par défaut, puis cliquer sur OK.
 
-Pycharm crée un environnement virtuel dédié à ce projet et le gère automatiquement dans le dossier "venv".
+Pycharm crée alors un environnement virtuel dédié à ce projet et le gère automatiquement dans le dossier "venv".
 
 ___
 
@@ -151,7 +152,7 @@ ___
 ### 3.1 Pour JupyterLab
 
 Deux Notebooks sont contenus dans ce projet. Documentation.ipynb contient la documentation et fonctionne avec les libraires fournies par l'installation de JupyterLab.
-En revanche, Flight_logs_display.ipynb, qui sert à tracer les enregistrements du vol précédent, requiert des librairies Python supplémentaires.
+En revanche, Flight_logs_dashboard.ipynb, qui sert à tracer les enregistrements du vol précédent, requiert des librairies Python supplémentaires.
 - Installer la librairie Python "ipywidgets" :
   + ~$ ```pip3 install ipywidgets```
 - Installer la librairie Python "plotly" :
@@ -162,14 +163,14 @@ En revanche, Flight_logs_display.ipynb, qui sert à tracer les enregistrements d
 Ce projet est livré avec un fichier "requirements.txt" contenant le nom de toutes les librairies nécessaires.
 - A l'aide d'un terminal de commande, se placer dans le dossier source du projet "TME_consensus" installé sur le PC (commandes ```ls``` et ```cd```)
 - Activer l'environnement virtuel du projet :
-  + ~/PycharmProjects/TME_consensus$ ```source venv/bin/activate```
+  + (venv) ~/PycharmProjects/TME_consensus$ ```source venv/bin/activate```
 - Installer toutes les libraries listées dans le fichier "requirements.txt" en respectant les versions spécifiées :
   + (venv) ~/PycharmProjects/TME_consensus$ ```python3 -m pip install -r requirements.txt```
-- Désactiver l'environnement virtuel :
+- Quitter l'environnement virtuel :
   + (venv) ~/PycharmProjects/TME_consensus$ ```deactivate```
 
 ___
 
-
-Les installations sont terminées, ouvrir le fichier "Documentation.ipynb" avec JupyterLab pour obtenir des informations supplémentaires et avoir accès au mode d'emploi.
+Les installations sont terminées et tous les programmes Python du projet peuvent être exécutés à partir de PyCharm.
+Ouvrir le Notebook "Documentation.ipynb" avec JupyterLab pour obtenir des informations supplémentaires et avoir accès au mode d'emploi.
 
