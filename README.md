@@ -18,34 +18,42 @@ Ce projet a été conçu pour fonctionner en Python 3.10 avec le logiciel Pychar
 - Une fois qu'Ubuntu est démarré depuis la clé USB, suivre les instructions et installer Ubuntu 22.04 sur le PC en configuration minimale (en simple ou dual-boot selon l'utilisation souhaitée) ;
 - A la fin de l'installation, connecter le PC à Internet, puis lancer l'application "Software Updater" ;
 - Installer les mises à jour les plus récentes et redémarrer le PC ;
-- Dernière étape : ouvrir un terminal de commande et entrer les commandes suivantes : ```sudo apt-get update```, puis ```sudo apt-get upgrade```.
+- Dernière étape : ouvrir un terminal de commande et entrer les commandes suivantes : 
+  + ~$ ```sudo apt-get update```
+  + ~$ ```sudo apt-get upgrade```
 
 ### Configuration de Python
 Une version de Python 3.10 est livrée et installée par défaut sur Ubuntu 22.04, aucune autre installation de Python n'est nécessaire.
 En revanche, le gestionnaire de paquets pip n'est pas installé par défaut.
-- Installer pip pour Python3 avec la commande ```sudo apt install python3-pip```.
+- Installer pip pour Python3 :
+  + ~$ ```sudo apt install python3-pip```
 
-Pour séparer les projets Python dans des environnements distancts (et afin d'éviter les problèmes de compatibilité entre les librairies utilisées par différents projets,
+Pour séparer les projets Python dans des environnements distancts (et afin d'éviter les problèmes de compatibilité entre les librairies utilisées par différents projets),
 il est préferrable d'isoler chaque projet dans un environnement virtuel qui contient uniquement les librairies Python nécessaiers au projet.
 Le module "venv" permet de créer et gérer les environnements virtuels.
-- Installer venv avec la commande ```sudo apt install python3.10-venv```.
+- Installer venv :
+  + ~$ ```sudo apt install python3.10-venv```
 
 ### Installation du cfclient
 Le cfclient est l'application officielle de Bitcraze pour configurer et faire voler les drones Crazyflie. 
 Pour ce projet, il ne sera utilisé que pour configurer les drones.
-La procédure d'installation du cfclient est rappelée ici, bien qu'elle soit disponible sur le [site officiel de Bitcraze]([https://pages.github.com/](https://www.bitcraze.io/documentation/repository/crazyflie-clients-python/master/installation/install/))
-- Créer un environnement virtuel spécifique au cfclient avec la commande ```python3 -m venv cfclient```. Cette commande crée un dossier "cfclient" dans le répertoire ```~/``` (Home), dans lequel un nouvel interpréteur Python 3.10 est ajouté.
-- Activer l'environnement virtuel avec la commande ```source cfclient/bin/activate```.
-- Installer les pré-requis du cfclient dans son environnement virtuel avec les commandes suivantes :
-  + ```sudo apt install git```
-  + ```sudo apt insall python3-pip```
-  + ```sudo apt install libxcb-xinerama0```
-  + ```sudo pip3 install --upgrade pip```
+La procédure d'installation du cfclient est rappelée ici, bien qu'elle soit disponible sur le 
+[site officiel de Bitcraze]([https://pages.github.com/](https://www.bitcraze.io/documentation/repository/crazyflie-clients-python/master/installation/install/))
+- Créer un environnement virtuel spécifique au cfclient :
+  + ~$ ```python3 -m venv cfclient``` 
+Cette commande crée un dossier "cfclient" dans le répertoire ```~/``` (Home), dans lequel un nouvel interpréteur Python 3.10 est ajouté.
+- Activer l'environnement virtuel :
+  + ~$ ```source cfclient/bin/activate```
+- Installer les pré-requis du cfclient dans son environnement virtuel :
+  + (cfclient) ~$ ```sudo apt install git```
+  + (cfclient) ~$ ```sudo apt insall python3-pip```
+  + (cfclient) ~$ ```sudo apt install libxcb-xinerama0```
+  + (cfclient) ~$ ```sudo pip3 install --upgrade pip```
 
 - Autoriser l'utilisation des Dongle USB "CrazyRadioPA" sans les permissions d'administrateur :
-  + ```sudo groupadd plugdev```
-  + ```sudo usermod -a -G plugdev $USER```
-  + Copier-coller du texte suivant en tant que commande : 
+  + (cfclient) ~$ ```sudo groupadd plugdev```
+  + (cfclient) ~$ ```sudo usermod -a -G plugdev $USER```
+  + Copier-coller le texte suivant en tant que commande : 
 ```  
 cat <<EOF | sudo tee /etc/udev/rules.d/99-bitcraze.rules > /dev/null
 # Crazyradio (normal operation)
@@ -57,24 +65,29 @@ SUBSYSTEM=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="5740", MODE="0664"
 EOF
 ```
 
-- Installer le cfclient avec la commande suivante : ```pip3 install cfclient```
-- Une fois installé, le cfclient peut être exécuté à partir de son environnement virtuel avec la commande ```cfclient```.
-- Quitter l'environnement virtuel avec la commande ```deactivate```.
+- Installer le cfclient : 
+  + (cfclient) ~$ ```pip3 install cfclient```
+- Une fois installé, le cfclient peut être exécuté à partir de son environnement virtuel avec la commande suivante :
+  + (cfclient) ~$ ```cfclient```
+- Quitter l'environnement virtuel :
+  + (cfclient) ~$ ```deactivate```
 
 ### Instalation de PyCharm
-- Installer PyCharm Community Edition sia le gestionnaire de paquets "snap" en utilisant la commande : ```sudo snap install pycharm-community --classic```.
+- Installer PyCharm Community Edition via le gestionnaire de paquets "snap" :
+  + ~$ ```sudo snap install pycharm-community --classic```
 
 ### Installation de JupyterLab
--Installer JupyterLab avec la commande : ``` ```.
+-Installer JupyterLab : 
+  + ~$ ``` ```
 
 ### Création des raccourcis
 La procédure de lancement du cfclient n'est pas très "user-friendly" actuellement : il faut ouvrir un terminal de commande, activer le bon environnement 
-virtuel, puis taper la commande ```cfclient```.
+virtuel, puis taper la commande (cfclient) ~$ ```cfclient```.
 Il en va de même pour JupyterLab. C'est pourquoi je propose d'automatiser ces procédures en créant un raccourci dans la liste des applications 
 pour lancer ces programmes en un clic.
 - Créer un nouveau fichier sur le bureau à l'aide de l'éditeur de texte. Le nommer "cfclient.desktop".
 - Télécharger le logo de Bitcraze et l'enregistrer sur le PC.
-- Copier-coller le texte suivant dans ce fichier et l'enregistrer (modifier les chemins d'accès si besoin).
+- Copier-coller le texte suivant dans le fichier "cfclient.desktop" et l'enregistrer (modifier les informations et chemins d'accès si besoin).
 ```
 [Desktop Entry]
 Version=2022.12
@@ -91,8 +104,8 @@ Categories=Application
 - Faire un deuxième clic-droit sur ce fichier, puis "Allow launching".
 Le fichier ainsi créé agit comme un raccourci sur le bureau : un double clic lance le cfclient.
 Pour intégrer ce raccourci à la liste des applications, il est nécessaire de lancer l'explorateur de fichiers en tant qu'administrateur avec la commande 
-```sudo nautilus```
-- Faire un copier-coller du fichier "cfclient.desktop" dans le répertoire ```/usr/share/applications/``` (remonter le chemin d'accès jusqu'à la racine).
+~$ ```sudo nautilus```
+- A l'aide de l'xplorateur de fichiers lancé en tant qu'administrateur, faire un copier-coller du raccourci "cfclient.desktop" dans le répertoire ```/usr/share/applications/``` (remonter le chemin d'accès jusqu'à la racine).
 Le raccourci apparaît alors dans le menu des applications (touche Windows sur le bureau), et il est possible de l'ajouter à la barre des favoris 
 (clic-droit, puis "add to favourites").
 
