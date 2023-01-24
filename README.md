@@ -78,7 +78,7 @@ EOF
   + ~$ ```sudo snap install pycharm-community --classic```
 
 ### 1.5. Installation de JupyterLab
--Installer JupyterLab : 
+- Installer JupyterLab : 
   + ~$ ```pip3 install jupyterlab```
 
 ### 1.6. Création des raccourcis
