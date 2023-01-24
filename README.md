@@ -7,11 +7,11 @@ de consensus automatisés entre les drones.
 
 Ce fichier détaille la configuration et l'installation des différents modules en partant de "zéro" (PC vierge sans système d'exploitation et connexion Internet fiable).
 
-## Pré-requis
+## 1. Pré-requis
 Ce projet a été conçu pour fonctionner en Python 3.10 avec le logiciel Pycharm Community Edition sur une machine Ubuntu 22.04 "Jammy Jellyfish" LTS.
 
 
-### Installation d'Ubuntu
+### 1.1. Installation d'Ubuntu
 - Créer une clé USB bootable contenant Ubuntu 22.04 (voir documentation sur le site officiel Linux) ;
 - Après avoir branché cette clé bootable sur le PC dédié au projet, démarrer le PC et ouvrir le menu de démarrage ou le menu du BIOS ;
 - Configurer le périphérique démarrage pour que l'ordinateur démarre avec l'OS contenu dans la clé USB, puis enregistrer et rebooter le PC ;
@@ -22,7 +22,7 @@ Ce projet a été conçu pour fonctionner en Python 3.10 avec le logiciel Pychar
   + ~$ ```sudo apt-get update```
   + ~$ ```sudo apt-get upgrade```
 
-### Configuration de Python
+### 1.2. Configuration de Python
 Une version de Python 3.10 est livrée et installée par défaut sur Ubuntu 22.04, aucune autre installation de Python n'est nécessaire.
 En revanche, le gestionnaire de paquets pip n'est pas installé par défaut.
 - Installer pip pour Python3 :
@@ -34,7 +34,7 @@ Le module "venv" permet de créer et gérer les environnements virtuels.
 - Installer venv :
   + ~$ ```sudo apt install python3.10-venv```
 
-### Installation du cfclient
+### 1.3. Installation du cfclient
 Le cfclient est l'application officielle de Bitcraze pour configurer et faire voler les drones Crazyflie. 
 Pour ce projet, il ne sera utilisé que pour configurer les drones.
 La procédure d'installation du cfclient est rappelée ici, bien qu'elle soit disponible sur le 
@@ -72,15 +72,15 @@ EOF
 - Quitter l'environnement virtuel :
   + (cfclient) ~$ ```deactivate```
 
-### Instalation de PyCharm
+### 1.4. Instalation de PyCharm
 - Installer PyCharm Community Edition via le gestionnaire de paquets "snap" :
   + ~$ ```sudo snap install pycharm-community --classic```
 
-### Installation de JupyterLab
+### 1.5. Installation de JupyterLab
 -Installer JupyterLab : 
-  + ~$ ``` ```
+  + ~$ ```pip3 install jupyterlab```
 
-### Création des raccourcis
+### 1.6. Création des raccourcis
 La procédure de lancement du cfclient n'est pas très "user-friendly" actuellement : il faut ouvrir un terminal de commande, activer le bon environnement 
 virtuel, puis taper la commande (cfclient) ~$ ```cfclient```.
 Il en va de même pour JupyterLab. C'est pourquoi je propose d'automatiser ces procédures en créant un raccourci dans la liste des applications 
@@ -103,11 +103,51 @@ Categories=Application
 - Sur le bureau, faire un clic-droit sur ce fichier, puis "Properties", "Permissions", et "Allow executing file as a program".
 - Faire un deuxième clic-droit sur ce fichier, puis "Allow launching".
 Le fichier ainsi créé agit comme un raccourci sur le bureau : un double clic lance le cfclient.
-Pour intégrer ce raccourci à la liste des applications, il est nécessaire de lancer l'explorateur de fichiers en tant qu'administrateur avec la commande 
-~$ ```sudo nautilus```
-- A l'aide de l'xplorateur de fichiers lancé en tant qu'administrateur, faire un copier-coller du raccourci "cfclient.desktop" dans le répertoire ```/usr/share/applications/``` (remonter le chemin d'accès jusqu'à la racine).
+Pour intégrer ce raccourci à la liste des applications, il est nécessaire de lancer l'explorateur de fichiers en tant qu'administrateur avec la commande
+  + ~$ ```sudo nautilus```
+- A l'aide de l'explorateur de fichiers lancé en tant qu'administrateur, faire un copier-coller du raccourci "cfclient.desktop" dans le répertoire "/usr/share/applications/" (remonter le chemin d'accès jusqu'à la racine).
 Le raccourci apparaît alors dans le menu des applications (touche Windows sur le bureau), et il est possible de l'ajouter à la barre des favoris 
 (clic-droit, puis "add to favourites").
 
-- Répéter la procédure avec JupyterLab.
+- Répéter la procédure avec JupyterLab en créant le fichier "jupyterlab.desktop" contenant les informations suivantes (adaptées su besoin) :
+```
+[Desktop Entry]
+Version=3.5.3
+Name=JupyterLab
+Comment=Server-based interactive Notebooks service.
+Exec=/home/eae/.local/bin/jupyter-lab
+Icon=/home/eae/cfclient/jupyter_logo.png
+Terminal=true
+Type=Application
+Categories=Application
+```
+
+___
+
+## 2. Import du projet
+
+Cette partie décrit comment importer ce projet de GitHub vers le PC utilisé.
+
+- Ouvrir Pycharm.
+- Dans l'écran d'accueil, cliquer sur "Get from VCS"
+- Sélectionner "Get from URL"
+- Copier-coller le lien suivant :
+- 
+
+
+## 3. Installation des librairies Python
+
+### 3.1 Pour JupyterLab
+
+Deux Notebooks sont contenus dans ce projet. Documentation.ipynb contient la documentation et fonctionne avec les libraires fournies par l'installation de JupyterLab.
+En revanche, Flight_logs_display.ipynb, qui sert à tracer les enregistrements du vol précédent, requiert des librairies Python supplémentaires.
+- Installer la librairie Python "ipywidgets" :
+  + ~$ ```pip3 install ipywidgets```
+- Installer la librairie Python "plotly" :
+  + ~$ ```pip3 install plotly```
+
+### 2.2. Pour le programme Python principal
+
+Ce projet est livré avec un fichier "requirements.txt" contenant le nom de toutes les librairies nécessaires
+
 
