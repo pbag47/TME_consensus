@@ -131,9 +131,20 @@ Cette partie décrit comment importer ce projet de GitHub vers le PC utilisé.
 - Ouvrir Pycharm.
 - Dans l'écran d'accueil, cliquer sur "Get from VCS"
 - Sélectionner "Get from URL"
-- Copier-coller le lien suivant :
-- 
+- Copier-coller le lien suivant : https://github.com/pbag47/TME_consensus.git 
+- Spécifier le répertoire de destination
+- Cliquer sur "Clone"
 
+Les fichiers sont alors téléchargés sur le PC, et Pycharm ouvre le projet.
+
+- Sur Pycharm, en bas à droite, cliquer sur la mention "No interpreter", ou "Python 3.10"
+- Cliquer sur "Interpreter settings"
+- Cliquer sur "Add Interpreter" -> "Add local interpreter" -> "Virtualenv Environment" -> "New"
+- Laisser les paramètres par défaut, puis cliquer sur OK.
+
+Pycharm crée un environnement virtuel dédié à ce projet et le gère automatiquement dans le dossier "venv".
+
+___
 
 ## 3. Installation des librairies Python
 
@@ -148,6 +159,17 @@ En revanche, Flight_logs_display.ipynb, qui sert à tracer les enregistrements d
 
 ### 2.2. Pour le programme Python principal
 
-Ce projet est livré avec un fichier "requirements.txt" contenant le nom de toutes les librairies nécessaires
+Ce projet est livré avec un fichier "requirements.txt" contenant le nom de toutes les librairies nécessaires.
+- A l'aide d'un terminal de commande, se placer dans le dossier source du projet "TME_consensus" installé sur le PC (commandes ```ls``` et ```cd```)
+- Activer l'environnement virtuel du projet :
+  + ~/PycharmProjects/TME_consensus$ ```source venv/bin/activate```
+- Installer toutes les libraries listées dans le fichier "requirements.txt" en respectant les versions spécifiées :
+  + (venv) ~/PycharmProjects/TME_consensus$ ```python3 -m pip install -r requirements.txt```
+- Désactiver l'environnement virtuel :
+  + (venv) ~/PycharmProjects/TME_consensus$ ```deactivate```
 
+___
+
+
+Les installations sont terminées, ouvrir le fichier "Documentation.ipynb" avec JupyterLab pour obtenir des informations supplémentaires et avoir accès au mode d'emploi.
 
