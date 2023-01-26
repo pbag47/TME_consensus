@@ -110,6 +110,7 @@ def xy_consensus_control_law(agent: Agent, agents_list: List[Agent]):
     #
     kp = 1
     xi = 1
+    kd = 0.2
     #
     xn_errors_list = []
     yn_errors_list = []
@@ -130,8 +131,8 @@ def xy_consensus_control_law(agent: Agent, agents_list: List[Agent]):
         vxn_errors_list.append(vxn_error)
         vyn_errors_list.append(vyn_error)
     #
-    ax = kp * (sum(xn_errors_list) - r) - xi * sum(vxn_errors_list)
-    ay = kp * (sum(yn_errors_list) - rho) - xi * sum(vyn_errors_list)
+    ax = kd * (kp * (sum(xn_errors_list) + r) - xi * sum(vxn_errors_list))
+    ay = kd * (kp * (sum(yn_errors_list) + rho) - xi * sum(vyn_errors_list))
     #
     roll = - ay  # (rad)
     pitch = ax  # (rad)
