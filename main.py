@@ -58,7 +58,6 @@ def detect_keyboard_input():
 def packet_reception_callback(packet: QRTPacket):
     global SWARM_MANAGER
     global RUN_TRACKER
-    global USER_WINDOW
 
     if not RUN_TRACKER:
         print(' ---- Warning ---- Callback execution interrupted by new QTM packet')
@@ -79,7 +78,6 @@ def packet_reception_callback(packet: QRTPacket):
 def main():
     global SWARM_MANAGER
     global RUN_TRACKER
-    global USER_WINDOW
 
     # -- Flight parameters ------------------------------------------------------- #
     qtm_ip_address: str = '192.168.0.1'
@@ -87,7 +85,7 @@ def main():
 
     # -- User interface setup ---------------------------------------------------- #
     app_test = QApplication(sys.argv)
-    USER_WINDOW = Window(uavs=agents_list, parameters_filename='flight_parameters.txt')
+    user_window = Window(uavs=agents_list, parameters_filename='flight_parameters.txt')
 
     # -- Asyncio loop setup ------------------------------------------------------ #
     q_loop = qasync.QEventLoop(app_test)
@@ -103,12 +101,12 @@ def main():
         q_loop.run_forever()
         return
 
-    asyncio.ensure_future(start_qtm_streaming(qtm_connection, USER_WINDOW.update_graph))
+    asyncio.ensure_future(start_qtm_streaming(qtm_connection, user_window.update_graph))
     q_loop.run_forever()
     asyncio.get_event_loop().run_until_complete(stop_qtm_streaming(qtm_connection))
 
     # -- UAV objects retrieval --------------------------------------------------- #
-    agents = USER_WINDOW.agents_list
+    agents = user_window.agents_list
     [agent.set_agents_to_avoid([agt.name for agt in agents if agt.name != agent.name]) for agent in agents]
 
     # -- Logs initialization ----------------------------------------------------- #
@@ -134,7 +132,7 @@ def main():
         agent.csv_logger = writer
         SWARM_MANAGER.add_agent(agent)
 
-    SWARM_MANAGER.manual_flight_agents_list = USER_WINDOW.manual_agents_list
+    SWARM_MANAGER.manual_flight_agents_list = user_window.manual_agents_list
 
     time.sleep(2)
 
@@ -161,5 +159,4 @@ def main():
 if __name__ == '__main__':
     global SWARM_MANAGER
     global RUN_TRACKER
-    global USER_WINDOW
     main()
