@@ -63,11 +63,11 @@ def joystick_map(device_name: str):
         }
 
         button_names = {
-            0x130: 'Takeoff / Land',            # a
-            0x131: 'Initial position',          # b
+            0x130: 'Takeoff/Land',              # a
+            0x131: 'Initial_position',          # b
             0x133: 'z_consensus',               # x
             0x134: 'xy_consensus',              # y
-            0x136: 'Manual flight',             # lx
+            0x136: 'Manual_flight',             # lx
             0x137: 'Standby',                   # rx
             0x13a: 'select',                    # select
             0x13b: 'Stop',                      # start
@@ -89,11 +89,11 @@ def joystick_map(device_name: str):
         }
 
         button_names = {
-            0x130: 'Takeoff / Land',        # a
-            0x131: 'Initial position',      # b
+            0x130: 'Takeoff/Land',          # a
+            0x131: 'Initial_position',      # b
             0x133: 'z_consensus',           # x
             0x134: 'xy_consensus',          # y
-            0x136: 'Manual flight',         # lx
+            0x136: 'Manual_flight',         # lx
             0x137: 'Standby',               # rx
             0x13a: 'select',                # select
             0x13b: 'Stop',                  # start

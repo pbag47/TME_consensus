@@ -325,7 +325,7 @@ def thrust_control_law(agent: Agent, targeted_z: float) -> int:
 
 
 def yaw_rate_control_law(agent: Agent, targeted_yaw: float) -> float:
-    yaw_kp = 10
+    yaw_kp = 5
     targeted_yaw = targeted_yaw % (2 * numpy.pi)
     if targeted_yaw > numpy.pi:
         targeted_yaw = targeted_yaw - (2 * numpy.pi)
