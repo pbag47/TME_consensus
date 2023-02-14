@@ -96,7 +96,7 @@ def xy_consensus_control_law(agent: Agent, agents_list: List[Agent]):
     formation à réaliser, puis être déclarées dans le fichier cf_info.py
     """
 
-    measured_yaw = agent.yaw * numpy.pi / 180  # Convert from degrees to radians
+    yaw = agent.yaw * numpy.pi / 180  # Convert from degrees to radians
 
     r = agent.xy_consensus_offset[0]  # (m)
     rho = agent.xy_consensus_offset[1]  # (m)

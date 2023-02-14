@@ -97,7 +97,7 @@ def xy_consensus_control_law(agent: Agent, agents_list: List[Agent]):
     formation à réaliser, puis être déclarées dans le fichier cf_info.py
     """
 
-    measured_yaw = agent.yaw * numpy.pi / 180  # Convert from degrees to radians
+    yaw = agent.yaw * numpy.pi / 180  # Convert from degrees to radians
 
     r = agent.xy_consensus_offset[0]  # (m)
     rho = agent.xy_consensus_offset[1]  # (m)
@@ -117,25 +117,51 @@ def xy_consensus_control_law(agent: Agent, agents_list: List[Agent]):
     vxn_errors_list = []
     vyn_errors_list = []
     for agt in connected_agents:
+        # Calcul des erreurs de position sur x et y dans le repère de l'arène
         x_error = agt.extpos.x - agent.extpos.x
         y_error = agt.extpos.y - agent.extpos.y
-        xn_error = x_error * numpy.cos(measured_yaw) + y_error * numpy.sin(measured_yaw)
-        yn_error = - x_error * numpy.sin(measured_yaw) + y_error * numpy.cos(measured_yaw)
+        #
+        # Changement de repère par une rotation autour de l'axe z (lacet)
+        # pour trouver les erreurs de position sur xn et yn dans le repère de navigation du drone
+        # L'angle de lacet (yaw), est défini positif pour une rotation du drone dans le sens horaire autour de l'axe z
+        # d'où la matrice de passage du repère de l'arène vers le repère de navigation :
+        #       [ cos(yaw)      sin(yaw)    ]
+        # T =   [                           ]
+        #       [ - sin(yaw)    cos(yaw)    ]
+        xn_error = x_error * numpy.cos(yaw) + y_error * numpy.sin(yaw)
+        yn_error = - x_error * numpy.sin(yaw) + y_error * numpy.cos(yaw)
+        #
+        # Stockage dans une liste des erreurs pour chaque drone connecté au drone que l'on veut commander
         xn_errors_list.append(xn_error)
         yn_errors_list.append(yn_error)
         #
+        # Calcul des différences de vitesse dans le repère de l'arène
         vx_error = agent.velocity[0] - agt.velocity[0]
         vy_error = agent.velocity[1] - agt.velocity[1]
-        vxn_error = vx_error * numpy.cos(measured_yaw) + vy_error * numpy.sin(measured_yaw)
-        vyn_error = - vx_error * numpy.sin(measured_yaw) + vy_error * numpy.cos(measured_yaw)
+        #
+        # Passage dans le repère de navigation du drone
+        vxn_error = vx_error * numpy.cos(yaw) + vy_error * numpy.sin(yaw)
+        vyn_error = - vx_error * numpy.sin(yaw) + vy_error * numpy.cos(yaw)
+        #
+        # Stockage des différences de vitesse dans une liste
         vxn_errors_list.append(vxn_error)
         vyn_errors_list.append(vyn_error)
     #
-    ax = kd * (kp * (sum(xn_errors_list) + r) - xi * sum(vxn_errors_list))
-    ay = kd * (kp * (sum(yn_errors_list) + rho) - xi * sum(vyn_errors_list))
+    # Calcul des commandes d'accélération souhaitées sur xn et yn dans le repère de navigation du drone
+    # Réadaptation de la structure de loi de commande utilisée pour le "TP trajectoire circulaire" de 1ère année.
+    axn = kd * (kp * (sum(xn_errors_list) + r) - xi * sum(vxn_errors_list))
+    ayn = kd * (kp * (sum(yn_errors_list) + rho) - xi * sum(vyn_errors_list))
     #
-    roll = - ay  # (rad)
-    pitch = ax  # (rad)
+    # Calcul des commandes en angle de roulis (roll) et de tangage (pitch), découlant des accélérations souhaitées
+    #
+    # L'angle de roulis est défini positif pour une rotation du drone dans le sens horaire autour de l'axe x
+    # Un angle de roulis positif projette une composante de la force de portance sur l'axe y,
+    # dans le sens des y négatifs, d'où le changement de signe pour passer de ayn à roll.
+    roll = - ayn  # (rad)
+    # L'angle de tangage est défini positif pour une rotation du drone dans le sens horaire autour de l'axe y
+    # Un angle de tangage positif projette une composante de la force de portance sur l'axe x,
+    # dans le sens des x positifs, donc pas de changement de signe.
+    pitch = axn  # (rad)
     #
     #
     # -------------------------------------------------- #
