@@ -1,4 +1,5 @@
 import asyncio
+import logging
 import qtm
 import numpy as np
 
@@ -7,13 +8,15 @@ from qtm import QRTConnection
 from qtm.packet import RT3DMarkerPositionNoLabel
 from typing import List
 
+logger = logging.getLogger(__name__)
+
 
 async def connect_to_qtm(ip: str):
     connection: QRTConnection = await qtm.connect(ip)
-    if connection:
-        print('QTM connected @', ip)
+    if connection is None:
+        logger.error('Error during QTM connection @ ' + ip)
     else:
-        print(' ---- Warning ---- Error during QTM connection @', ip, '***')
+        logger.info('QTM connected @ ' + ip)
     return connection
 
 
@@ -26,12 +29,13 @@ def frame_acquisition(connection: QRTConnection):
 
 
 def initial_uav_detection(agents: List[Agent], markers: List[RT3DMarkerPositionNoLabel], timestamp: float):
-    if len(markers) < len(agents):
-        print(' -- Warning -- : Too few detected makers than expected, flight disabled')
-        for agt in agents:
-            agt.enabled = False
-    elif len(markers) > len(agents):
-        print(' -- Warning -- : Too many detected markers than expected')
+    if len(markers) != len(agents):
+        logger.error(str(len(agents)) + ' objects declared, ' + str(len(markers)) + ' markers found by QTM')
+        for agent in agents:
+            agent.stop()
+        raise ValueError('Expected ' + str(len(agents)) + ' markers, '
+                                                          'but ' + str(len(markers)) + ' markers were '
+                                                                                       'received from QTM')
 
     for mk in markers:
         d = [distance_init_pos_to_marker(agt.initial_position,
@@ -39,11 +43,13 @@ def initial_uav_detection(agents: List[Agent], markers: List[RT3DMarkerPositionN
         try:
             min_d_index = d.index(min(d))
             agt = agents[min_d_index]
-            agt.update_extpos(mk, timestamp)
-            print(agt.name, 'found @', agt.extpos)
+            agt.update_position(mk, timestamp)
+            logger.info(agt.name + ' found @ ' + str([round(agt.position.x, 2),
+                                                      round(agt.position.y, 2),
+                                                      round(agt.position.z, 2)]))
             if d[min_d_index] > 0.5:
-                print(' ---- Warning ---- UAV <', agt.name, '> marker found too far from expected initial position')
-                print('                   High risk of marker mismatch')
+                logger.error(agt.name + ' marker found too far from its expected initial position')
+                agt.stop()
         except ValueError:
             break
 
@@ -53,11 +59,11 @@ def uav_tracking(agents: List[Agent], markers: List[RT3DMarkerPositionNoLabel], 
     lost_uav = []
     for agt in agents:
         try:
-            index = markers_ids.index(agt.extpos.id)
-            agt.update_extpos(markers[index], timestamp)
+            index = markers_ids.index(agt.position.id)
+            agt.update_position(markers[index], timestamp)
             agt.send_external_position()
         except ValueError:
-            print(' ---- Warning ----', agt.name, 'tracking lost, switching the engines off')
+            logger.error(agt.name + ' tracking lost, switching the engines off')
             agt.stop()
             lost_uav.append(agt)
     return lost_uav
@@ -85,9 +91,9 @@ async def disconnect_qtm(connection: QRTConnection):
     if connection is not None:
         await connection.stream_frames_stop()
         connection.disconnect()
-        print('QTM disconnected')
+        logger.info('QTM disconnected')
     else:
-        print('QTM connection already closed')
+        logger.warning('Attempted to close a non-existing QTM connection')
 
 
 if __name__ == '__main__':

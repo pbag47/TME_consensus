@@ -29,11 +29,11 @@ def z_consensus_control_law(agent: Agent, agents_list: List[Agent]):
     La variable connected_agents est une liste d'instances de la classe Agent, qui correspond à l'ensemble des
     voisins au sens du graphe de connectivité du drone concerné.
 
-    extpos :
-    Pour accéder aux coordonnées d'un drone, la classe Agent contient un attribut extpos qui regroupe les trois
+    position :
+    Pour accéder aux coordonnées d'un drone, la classe Agent contient un attribut position qui regroupe les trois
     informations de position du drone (x, y et z en m dans le repère de l'arène).
     Soit la variable agt définie comme une instance de la classe Agent et représentant un drone :
-    x = agt.extpos.x ; y = agt.extpos.y ; z = agt.extpos.z
+    x = agt.position.x ; y = agt.position.y ; z = agt.position.z
     """
 
     connected_agents = [agt for agt in agents_list
@@ -43,7 +43,7 @@ def z_consensus_control_law(agent: Agent, agents_list: List[Agent]):
     #
     #
     kp = 1
-    z_errors_list = [agt.extpos.z - agent.extpos.z for agt in connected_agents]
+    z_errors_list = [agt.position.z - agent.position.z for agt in connected_agents]
     vz = kp * sum(z_errors_list)  # (m/s)
     #
     #
@@ -79,22 +79,22 @@ def xy_consensus_control_law(agent: Agent, agents_list: List[Agent]):
     La variable connected_agents est une liste d'instances de la classe Agent, qui correspond à l'ensemble des
     voisins au sens du graphe de connectivité du drone concerné.
 
-    extpos :
-    Pour accéder aux coordonnées d'un drone, la classe Agent contient un attribut extpos qui regroupe les trois
+    position :
+    Pour accéder aux coordonnées d'un drone, la classe Agent contient un attribut position qui regroupe les trois
     informations de position du drone (x, y et z en m dans le repère de l'arène).
     Soit la variable agt définie comme une instance de la classe Agent et représentant un drone :
-    x = agt.extpos.x ; y = agt.extpos.y ; z = agt.extpos.z
+    x = agt.position.x ; y = agt.position.y ; z = agt.position.z
 
     velocity :
     Pour accéder aux informations de vitesse d'un drone, la classe Agent contient un attribut velocity qui regroupe
-    vx, vy et vz (en m/s dans le repère de l'arène) sous forme d'éléments d'une liste.
+    vx, vy et vz (en m/s dans le repère de l'arène).
     Soit la variable agt définie comme une instance de la classe Agent et représentant un drone :
-    vx = agt.velocity[0] ; vy = agt.velocity[1] ; vz = agt.velocity[2]
+    vx = agt.velocity.x ; vy = agt.velocity.y ; vz = agt.velocity.z
 
     r et rho :
     Ces variables correspondent au décalage souhaité sur x et sur y (respectivement r et rho, en m), du drone
     concerné par rapport à la formation. Ces valeurs doivent être calculées à la main pour chaque drone selon la
-    formation à réaliser, puis être déclarées dans le fichier cf_info.py
+    formation à réaliser, puis être déclarées lors du paramétrage du programme avant de faire décoller les drones.
     """
 
     yaw = agent.yaw * numpy.pi / 180  # Convert from degrees to radians
@@ -118,8 +118,8 @@ def xy_consensus_control_law(agent: Agent, agents_list: List[Agent]):
     vyn_errors_list = []
     for agt in connected_agents:
         # Calcul des erreurs de position sur x et y dans le repère de l'arène
-        x_error = agt.extpos.x - agent.extpos.x
-        y_error = agt.extpos.y - agent.extpos.y
+        x_error = agt.position.x - agent.position.x
+        y_error = agt.position.y - agent.position.y
         #
         # Changement de repère par une rotation autour de l'axe z (lacet)
         # pour trouver les erreurs de position sur xn et yn dans le repère de navigation du drone
@@ -136,8 +136,8 @@ def xy_consensus_control_law(agent: Agent, agents_list: List[Agent]):
         yn_errors_list.append(yn_error)
         #
         # Calcul des différences de vitesse dans le repère de l'arène
-        vx_error = agent.velocity[0] - agt.velocity[0]
-        vy_error = agent.velocity[1] - agt.velocity[1]
+        vx_error = agent.velocity.x - agt.velocity.x
+        vy_error = agent.velocity.y - agt.velocity.y
         #
         # Passage dans le repère de navigation du drone
         vxn_error = vx_error * numpy.cos(yaw) + vy_error * numpy.sin(yaw)
