@@ -116,7 +116,7 @@ class Agent:
         self.enabled = False
         logger.warning(self.name + ' connection attempt failed')
 
-    def setup_parameters(self):
+    def setup_parameters(self, _):
         log_config = LogConfig(name=self.name + ' battery voltage', period_in_ms=50)
         log_config.add_variable('pm.vbat', 'float')  # Retrieves the battery level
         self.cf.log.add_config(log_config)
